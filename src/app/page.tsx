@@ -137,14 +137,16 @@ export default function Home() {
             {[
               {
                 name: "Starter",
-                price: "199",
+                setup: "149",
+                monthly: "49",
                 desc: "Pour les petits commerces",
                 features: ["100 conversations/mois", "1 canal (site web)", "Réponses personnalisées", "Support email"],
                 popular: false,
               },
               {
                 name: "Pro",
-                price: "299",
+                setup: "249",
+                monthly: "99",
                 desc: "Le plus populaire",
                 features: [
                   "500 conversations/mois",
@@ -157,7 +159,8 @@ export default function Home() {
               },
               {
                 name: "Business",
-                price: "499",
+                setup: "399",
+                monthly: "199",
                 desc: "Pour les multi-sites",
                 features: [
                   "Conversations illimitées",
@@ -185,8 +188,9 @@ export default function Home() {
                 <h3 className="text-lg font-bold text-gray-900">{plan.name}</h3>
                 <p className="text-sm text-gray-500 mb-4">{plan.desc}</p>
                 <div className="mb-6">
-                  <span className="text-4xl font-bold text-gray-900">{plan.price}€</span>
+                  <span className="text-4xl font-bold text-gray-900">{plan.monthly}€</span>
                   <span className="text-gray-500">/mois</span>
+                  <p className="text-sm text-gray-500 mt-1">+ {plan.setup}€ d&apos;installation</p>
                 </div>
                 <ul className="space-y-3 mb-6">
                   {plan.features.map((f) => (

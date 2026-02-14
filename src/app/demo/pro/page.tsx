@@ -73,7 +73,7 @@ export default function ProDemo() {
           </Link>
           <div className="flex items-center gap-3">
             <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-bold text-indigo-700">
-              PRO — 299€/mois
+              PRO — 249€ + 99€/mois
             </span>
             <span className="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-700">
               POPULAIRE

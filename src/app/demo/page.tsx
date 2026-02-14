@@ -5,7 +5,8 @@ export default function DemoSelector() {
   const plans = [
     {
       name: "Starter",
-      price: "199",
+      setup: "149",
+      monthly: "49",
       tagline: "L'essentiel pour démarrer",
       href: "/demo/starter",
       color: "gray",
@@ -30,7 +31,8 @@ export default function DemoSelector() {
     },
     {
       name: "Pro",
-      price: "299",
+      setup: "249",
+      monthly: "99",
       tagline: "Le plus populaire",
       href: "/demo/pro",
       color: "indigo",
@@ -55,7 +57,8 @@ export default function DemoSelector() {
     },
     {
       name: "Business",
-      price: "499",
+      setup: "399",
+      monthly: "199",
       tagline: "L'expérience premium complète",
       href: "/demo/business",
       color: "amber",
@@ -144,9 +147,12 @@ export default function DemoSelector() {
 
               <div className="mb-6">
                 <span className={`text-4xl font-bold ${plan.name === "Business" ? "text-white" : "text-gray-900"}`}>
-                  {plan.price}€
+                  {plan.monthly}€
                 </span>
                 <span className={plan.name === "Business" ? "text-gray-400" : "text-gray-500"}>/mois</span>
+                <p className={`text-sm mt-1 ${plan.name === "Business" ? "text-gray-400" : "text-gray-500"}`}>
+                  + {plan.setup}€ d&apos;installation
+                </p>
               </div>
 
               {/* Features incluses */}

@@ -66,7 +66,7 @@ export default function StarterDemo() {
           </Link>
           <div className="flex items-center gap-3">
             <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
-              STARTER — 199€/mois
+              STARTER — 149€ + 49€/mois
             </span>
           </div>
         </div>

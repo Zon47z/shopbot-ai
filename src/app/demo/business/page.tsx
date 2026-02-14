@@ -86,7 +86,7 @@ export default function BusinessDemo() {
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-amber-500/30 px-4 py-1 text-xs font-bold text-amber-400">
               <Crown size={12} />
-              BUSINESS — 499€/mois
+              BUSINESS — 399€ + 199€/mois
             </span>
           </div>
         </div>
