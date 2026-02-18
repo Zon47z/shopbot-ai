@@ -1,4 +1,4 @@
-import { Bot, ArrowRight, CheckCircle, Crown, Sparkles, Zap } from "lucide-react";
+import { Bot, ArrowRight, CheckCircle, Crown, Sparkles, Zap, Instagram, MessageCircle } from "lucide-react";
 import Link from "next/link";
 
 export default function DemoSelector() {
@@ -192,6 +192,40 @@ export default function DemoSelector() {
               </Link>
             </div>
           ))}
+        </div>
+
+        {/* Channel Demos */}
+        <div className="mt-14 mb-6 text-center">
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Testez sur vos canaux</h2>
+          <p className="text-sm text-gray-500 mb-6">Voyez comment l&apos;assistant fonctionne sur Instagram et WhatsApp</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-lg mx-auto">
+            <Link
+              href="/demo/instagram"
+              className="flex items-center justify-center gap-3 rounded-2xl border border-gray-200 bg-white px-6 py-4 hover:border-pink-300 hover:shadow-lg transition-all group flex-1"
+            >
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex items-center justify-center">
+                <Instagram size={20} className="text-white" />
+              </div>
+              <div className="text-left">
+                <p className="text-sm font-semibold text-gray-900 group-hover:text-pink-600 transition-colors">Instagram DM</p>
+                <p className="text-xs text-gray-500">Démo messages privés</p>
+              </div>
+              <ArrowRight size={16} className="text-gray-400 ml-auto" />
+            </Link>
+            <Link
+              href="/demo/whatsapp"
+              className="flex items-center justify-center gap-3 rounded-2xl border border-gray-200 bg-white px-6 py-4 hover:border-green-300 hover:shadow-lg transition-all group flex-1"
+            >
+              <div className="w-10 h-10 rounded-xl bg-[#25D366] flex items-center justify-center">
+                <MessageCircle size={20} className="text-white" />
+              </div>
+              <div className="text-left">
+                <p className="text-sm font-semibold text-gray-900 group-hover:text-green-600 transition-colors">WhatsApp</p>
+                <p className="text-xs text-gray-500">Démo conversation</p>
+              </div>
+              <ArrowRight size={16} className="text-gray-400 ml-auto" />
+            </Link>
+          </div>
         </div>
 
         {/* Bottom note */}
