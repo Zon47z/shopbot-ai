@@ -180,7 +180,7 @@ export default function StarterDemo() {
               <h3 className="text-sm font-bold text-gray-900 mb-3">Non inclus</h3>
               <ul className="space-y-2.5">
                 {[
-                  "Instagram & WhatsApp",
+                  "WhatsApp",
                   "Suggestions rapides cliquables",
                   "Statistiques conversations",
                   "Support multilingue",

@@ -37,7 +37,7 @@ export default function Home() {
           </h1>
           <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
             ShopBot AI est un assistant intelligent qui répond instantanément à vos clients
-            sur votre site, Instagram et WhatsApp. Tarifs, horaires, rendez-vous — il gère tout, 24h/24.
+            sur votre site et WhatsApp. Tarifs, horaires, rendez-vous — il gère tout, 24h/24.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -150,7 +150,7 @@ export default function Home() {
                 desc: "Le plus populaire",
                 features: [
                   "500 conversations/mois",
-                  "3 canaux (site + Insta + WhatsApp)",
+                  "2 canaux (site + WhatsApp)",
                   "Réponses personnalisées",
                   "Statistiques avancées",
                   "Support prioritaire",

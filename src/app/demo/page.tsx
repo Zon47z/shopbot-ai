@@ -1,4 +1,4 @@
-import { Bot, ArrowRight, CheckCircle, Crown, Sparkles, Zap, Instagram, MessageCircle } from "lucide-react";
+import { Bot, ArrowRight, CheckCircle, Crown, Sparkles, Zap, MessageCircle } from "lucide-react";
 import Link from "next/link";
 
 export default function DemoSelector() {
@@ -18,7 +18,7 @@ export default function DemoSelector() {
         "Support email",
       ],
       notIncluded: [
-        "Instagram & WhatsApp",
+        "WhatsApp",
         "Suggestions cliquables",
         "Statistiques",
         "Multilingue",
@@ -38,7 +38,7 @@ export default function DemoSelector() {
       color: "indigo",
       features: [
         "500 conversations / mois",
-        "3 canaux : Site + Insta + WhatsApp",
+        "2 canaux : Site + WhatsApp",
         "Suggestions rapides cliquables",
         "Français + Anglais",
         "Statistiques conversations",
@@ -194,34 +194,21 @@ export default function DemoSelector() {
           ))}
         </div>
 
-        {/* Channel Demos */}
+        {/* Channel Demo */}
         <div className="mt-14 mb-6 text-center">
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Testez sur vos canaux</h2>
-          <p className="text-sm text-gray-500 mb-6">Voyez comment l&apos;assistant fonctionne sur Instagram et WhatsApp</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-lg mx-auto">
-            <Link
-              href="/demo/instagram"
-              className="flex items-center justify-center gap-3 rounded-2xl border border-gray-200 bg-white px-6 py-4 hover:border-pink-300 hover:shadow-lg transition-all group flex-1"
-            >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 flex items-center justify-center">
-                <Instagram size={20} className="text-white" />
-              </div>
-              <div className="text-left">
-                <p className="text-sm font-semibold text-gray-900 group-hover:text-pink-600 transition-colors">Instagram DM</p>
-                <p className="text-xs text-gray-500">Démo messages privés</p>
-              </div>
-              <ArrowRight size={16} className="text-gray-400 ml-auto" />
-            </Link>
+          <h2 className="text-xl font-bold text-gray-900 mb-2">Testez sur WhatsApp</h2>
+          <p className="text-sm text-gray-500 mb-6">Voyez comment l&apos;assistant fonctionne sur WhatsApp</p>
+          <div className="flex justify-center max-w-sm mx-auto">
             <Link
               href="/demo/whatsapp"
-              className="flex items-center justify-center gap-3 rounded-2xl border border-gray-200 bg-white px-6 py-4 hover:border-green-300 hover:shadow-lg transition-all group flex-1"
+              className="flex items-center justify-center gap-3 rounded-2xl border border-gray-200 bg-white px-6 py-4 hover:border-green-300 hover:shadow-lg transition-all group w-full"
             >
               <div className="w-10 h-10 rounded-xl bg-[#25D366] flex items-center justify-center">
                 <MessageCircle size={20} className="text-white" />
               </div>
               <div className="text-left">
                 <p className="text-sm font-semibold text-gray-900 group-hover:text-green-600 transition-colors">WhatsApp</p>
-                <p className="text-xs text-gray-500">Démo conversation</p>
+                <p className="text-xs text-gray-500">Démo conversation WhatsApp</p>
               </div>
               <ArrowRight size={16} className="text-gray-400 ml-auto" />
             </Link>

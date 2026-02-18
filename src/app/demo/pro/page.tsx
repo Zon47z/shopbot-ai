@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Send, Bot, User, ArrowLeft, BarChart3, MessageSquare, TrendingUp, Instagram, Phone } from "lucide-react";
+import { Send, Bot, User, ArrowLeft, BarChart3, MessageSquare, TrendingUp, Phone } from "lucide-react";
 import Link from "next/link";
 
 interface Message {
@@ -104,9 +104,6 @@ export default function ProDemo() {
               <div className="flex items-center gap-1.5">
                 <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15" title="Site web">
                   <MessageSquare size={13} className="text-white" />
-                </div>
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15" title="Instagram">
-                  <Instagram size={13} className="text-white" />
                 </div>
                 <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15" title="WhatsApp">
                   <Phone size={13} className="text-white" />
@@ -255,7 +252,7 @@ export default function ProDemo() {
               <ul className="space-y-2">
                 {[
                   "500 conversations / mois",
-                  "3 canaux : Site + Insta + WhatsApp",
+                  "2 canaux : Site + WhatsApp",
                   "Suggestions rapides cliquables",
                   "Français + Anglais",
                   "Statistiques de conversations",

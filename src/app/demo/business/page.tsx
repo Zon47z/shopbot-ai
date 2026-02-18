@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Send, Bot, User, ArrowLeft, BarChart3, MessageSquare, TrendingUp, Instagram, Phone, Globe, Palette, Building2, Shield, Crown, Sparkles } from "lucide-react";
+import { Send, Bot, User, ArrowLeft, BarChart3, MessageSquare, TrendingUp, Phone, Globe, Palette, Building2, Shield, Crown, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 interface Message {
@@ -154,7 +154,6 @@ export default function BusinessDemo() {
               <div className="space-y-2">
                 {[
                   { icon: <MessageSquare size={14} />, name: "Site web", status: "Actif", color: "text-green-400" },
-                  { icon: <Instagram size={14} />, name: "Instagram", status: "Actif", color: "text-green-400" },
                   { icon: <Phone size={14} />, name: "WhatsApp", status: "Actif", color: "text-green-400" },
                   { icon: <Globe size={14} />, name: "API custom", status: "Actif", color: "text-green-400" },
                 ].map((c) => (
@@ -388,12 +387,11 @@ export default function BusinessDemo() {
                 {/* Per-channel breakdown */}
                 <div className="rounded-xl border border-white/10 bg-white/5 p-4">
                   <h4 className="text-sm font-semibold text-white mb-3">Par canal</h4>
-                  <div className="grid grid-cols-4 gap-3">
+                  <div className="grid grid-cols-3 gap-3">
                     {[
-                      { name: "Site web", icon: <MessageSquare size={16} />, convos: 523, pct: 42 },
-                      { name: "Instagram", icon: <Instagram size={16} />, convos: 412, pct: 33 },
-                      { name: "WhatsApp", icon: <Phone size={16} />, convos: 245, pct: 20 },
-                      { name: "API", icon: <Globe size={16} />, convos: 67, pct: 5 },
+                      { name: "Site web", icon: <MessageSquare size={16} />, convos: 623, pct: 50 },
+                      { name: "WhatsApp", icon: <Phone size={16} />, convos: 545, pct: 44 },
+                      { name: "API", icon: <Globe size={16} />, convos: 79, pct: 6 },
                     ].map((ch) => (
                       <div key={ch.name} className="text-center">
                         <div className="flex h-10 w-10 mx-auto items-center justify-center rounded-xl bg-white/10 text-gray-300 mb-2">
