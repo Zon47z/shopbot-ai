@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ShopBot AI - Assistant IA pour votre commerce",
+  title: "AlloPro AI - Assistant vocal IA pour artisans",
   description:
-    "Un chatbot IA qui répond à vos clients 24/7. Plus de messages sans réponse, plus de clients perdus.",
+    "L'assistant qui décroche quand vous êtes sur chantier. Plus d'appels manqués, plus de clients perdus. Plombiers, électriciens, serruriers — on gère vos appels 24/7.",
 };
 
 export default function RootLayout({
