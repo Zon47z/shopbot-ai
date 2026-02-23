@@ -348,8 +348,10 @@ export default function VoiceDemo() {
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [useElevenLabs, setUseElevenLabs] = useState(true);
 
-  // Load voices early
+  // Load browser voices as fallback
   useEffect(() => {
     if (typeof window !== "undefined" && window.speechSynthesis) {
       window.speechSynthesis.getVoices();
@@ -365,9 +367,50 @@ export default function VoiceDemo() {
     }, 100);
   }, []);
 
-  // --- SPEAK WITH NATURAL PAUSES ---
-  // Splits text into sentences and speaks each with a small pause between them
-  const speakNaturally = useCallback((text: string, onEnd?: () => void) => {
+  // --- SPEAK WITH ELEVENLABS (human-quality voice) ---
+  const speakWithElevenLabs = useCallback(async (text: string, onEnd?: () => void) => {
+    try {
+      const res = await fetch("/api/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+
+      if (!res.ok) throw new Error("TTS API failed");
+
+      const audioBlob = await res.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+
+      if (audioRef.current) {
+        audioRef.current.pause();
+        URL.revokeObjectURL(audioRef.current.src);
+      }
+
+      const audio = new Audio(audioUrl);
+      audioRef.current = audio;
+
+      audio.onplay = () => setIsSpeaking(true);
+      audio.onended = () => {
+        setIsSpeaking(false);
+        URL.revokeObjectURL(audioUrl);
+        onEnd?.();
+      };
+      audio.onerror = () => {
+        setIsSpeaking(false);
+        URL.revokeObjectURL(audioUrl);
+        onEnd?.();
+      };
+
+      await audio.play();
+    } catch {
+      // ElevenLabs failed — disable it and fall back to browser voice
+      setUseElevenLabs(false);
+      speakWithBrowser(text, onEnd);
+    }
+  }, []);
+
+  // --- FALLBACK: Browser Speech Synthesis with natural pauses ---
+  const speakWithBrowser = useCallback((text: string, onEnd?: () => void) => {
     if (typeof window === "undefined" || !window.speechSynthesis) {
       onEnd?.();
       return;
@@ -375,7 +418,6 @@ export default function VoiceDemo() {
 
     window.speechSynthesis.cancel();
 
-    // Split into sentences at . ! ? and also at commas followed by a space (for natural pauses)
     const chunks = text
       .split(/(?<=[.!?])\s+/)
       .filter((c) => c.trim().length > 0);
@@ -398,20 +440,8 @@ export default function VoiceDemo() {
       const chunk = chunks[chunkIndex];
       const utterance = new SpeechSynthesisUtterance(chunk);
       utterance.lang = "fr-FR";
-
-      // Vary rate slightly for naturalness
-      const baseRate = 0.92;
-      // Questions slightly slower, short responses slightly faster
-      if (chunk.includes("?")) {
-        utterance.rate = baseRate - 0.03;
-        utterance.pitch = 1.05; // Slightly higher pitch for questions
-      } else if (chunk.length < 20) {
-        utterance.rate = baseRate + 0.05;
-        utterance.pitch = 1.0;
-      } else {
-        utterance.rate = baseRate;
-        utterance.pitch = 1.0;
-      }
+      utterance.rate = chunk.includes("?") ? 0.89 : 0.92;
+      utterance.pitch = chunk.includes("?") ? 1.05 : 1.0;
 
       if (frenchVoice) utterance.voice = frenchVoice;
 
@@ -419,9 +449,7 @@ export default function VoiceDemo() {
       utterance.onend = () => {
         chunkIndex++;
         if (chunkIndex < chunks.length) {
-          // Natural pause between sentences (200-500ms)
-          const pause = 200 + Math.random() * 300;
-          setTimeout(speakNext, pause);
+          setTimeout(speakNext, 200 + Math.random() * 300);
         } else {
           setIsSpeaking(false);
           onEnd?.();
@@ -438,6 +466,15 @@ export default function VoiceDemo() {
     setIsSpeaking(true);
     speakNext();
   }, []);
+
+  // --- MAIN SPEAK FUNCTION ---
+  const speakNaturally = useCallback((text: string, onEnd?: () => void) => {
+    if (useElevenLabs) {
+      speakWithElevenLabs(text, onEnd);
+    } else {
+      speakWithBrowser(text, onEnd);
+    }
+  }, [useElevenLabs, speakWithElevenLabs, speakWithBrowser]);
 
   const startListening = useCallback(() => {
     if (typeof window === "undefined") return;
@@ -547,6 +584,10 @@ export default function VoiceDemo() {
     if (timerRef.current) clearInterval(timerRef.current);
     if (recognitionRef.current) {
       try { recognitionRef.current.stop(); } catch {}
+    }
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
     }
     window.speechSynthesis?.cancel();
   }, []);
