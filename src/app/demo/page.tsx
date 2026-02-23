@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Phone, Mic, MicOff, PhoneOff, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -13,11 +13,15 @@ type ConversationState =
   | "idle"
   | "greeting"
   | "waiting_problem"
+  | "clarifying_problem"
   | "waiting_name"
   | "waiting_address"
   | "waiting_phone"
-  | "confirming"
   | "ended";
+
+function pick<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
 function getAssistantResponse(
   userText: string,
@@ -27,62 +31,160 @@ function getAssistantResponse(
   const text = userText.toLowerCase().trim();
   const ctx = { ...context };
 
-  // Handle price questions in any state
+  // --- Handle greetings from user (bonjour, salut, etc.) in waiting_problem ---
+  if (state === "waiting_problem" && text.length < 20) {
+    const isGreeting = /^(bonjour|salut|bonsoir|hey|allo|allô|coucou|oui bonjour|oui|hello)/.test(text);
+    if (isGreeting && !text.includes("fuite") && !text.includes("problème") && !text.includes("panne")) {
+      return {
+        response: pick([
+          "Oui bonjour ! Dites-moi, qu'est-ce qui se passe chez vous ?",
+          "Bonjour ! Comment je peux vous aider ?",
+          "Oui, dites-moi tout, qu'est-ce qu'il y a ?",
+        ]),
+        nextState: "waiting_problem",
+        updatedContext: ctx,
+      };
+    }
+  }
+
+  // --- Handle price questions in any state ---
   if (
     text.includes("combien") ||
     text.includes("prix") ||
     text.includes("tarif") ||
     text.includes("coût") ||
-    text.includes("devis")
+    text.includes("devis") ||
+    text.includes("cher")
+  ) {
+    const alreadyHasName = !!ctx.name;
+    return {
+      response: pick([
+        `Alors pour les tarifs, c'est Martin qui gère ça directement. Il préfère toujours voir sur place avant de donner un chiffre, comme ça pas de mauvaise surprise pour vous. ${alreadyHasName ? "Il vous rappelle très vite pour en discuter." : "Si vous me donnez votre nom, je lui transmets et il vous rappelle pour en parler."}`,
+        `Bonne question ! Honnêtement, ça dépend vraiment de la situation, c'est pour ça que Martin préfère se déplacer et voir avant de vous donner un prix. ${alreadyHasName ? "Il va vous recontacter rapidement." : "Donnez-moi votre nom et il vous rappelle pour ça."}`,
+      ]),
+      nextState: alreadyHasName ? "waiting_address" : "waiting_name",
+      updatedContext: ctx,
+    };
+  }
+
+  // --- Handle "quand" / availability questions ---
+  if (
+    text.includes("quand") ||
+    text.includes("disponible") ||
+    text.includes("venir quand") ||
+    text.includes("rapidement") ||
+    text.includes("aujourd'hui") ||
+    text.includes("maintenant")
   ) {
     return {
-      response:
-        "Martin préfère se déplacer et voir la situation avant de vous donner un tarif précis. Il vous rappellera avec un devis adapté. Quel est votre nom pour que je lui transmette ?",
-      nextState: "waiting_name",
+      response: pick([
+        "Martin est sur un chantier là, mais il est assez réactif d'habitude. Dès qu'il a votre message, il vous rappelle pour caler ça avec vous. On prend vos coordonnées ?",
+        "Écoutez, Martin gère son planning, mais il rappelle en général dans l'heure. Donnez-moi vos infos et il vous recontacte dès qu'il est dispo.",
+      ]),
+      nextState: ctx.name ? "waiting_address" : "waiting_name",
       updatedContext: ctx,
     };
   }
 
   switch (state) {
     case "waiting_problem": {
-      // Try to detect the type of problem
       if (text.length < 3) {
         return {
-          response: "Excusez-moi, je n'ai pas bien compris. Pouvez-vous me décrire votre problème ?",
+          response: "Pardon, j'ai pas bien entendu. Vous pouvez me répéter ?",
           nextState: "waiting_problem",
           updatedContext: ctx,
         };
       }
 
-      let problemType = "un problème";
-      if (text.includes("fuite") || text.includes("eau") || text.includes("coule") || text.includes("inond")) {
-        problemType = "une fuite d'eau";
-      } else if (text.includes("bouché") || text.includes("bouchée") || text.includes("évier") || text.includes("canalisation")) {
+      // --- Detect problem type ---
+      let problemType = "";
+      let empathy = "";
+      let tip = "";
+
+      if (text.includes("fuite") || text.includes("coule") || text.includes("goutte") || text.includes("inond")) {
+        problemType = "une fuite";
+        if (text.includes("évier") || text.includes("cuisine")) problemType = "une fuite sous l'évier";
+        else if (text.includes("salle de bain") || text.includes("douche")) problemType = "une fuite dans la salle de bain";
+        else if (text.includes("plafond")) problemType = "une fuite au plafond";
+        empathy = pick([
+          "Aïe, c'est pas top ça.",
+          "Oh mince, c'est embêtant.",
+          "D'accord, c'est le genre de truc qu'il faut pas laisser traîner.",
+        ]);
+        tip = text.includes("inond") || text.includes("partout") || text.includes("beaucoup")
+          ? " En attendant Martin, essayez de couper l'arrivée d'eau si vous pouvez, hein, pour limiter les dégâts."
+          : "";
+      } else if (text.includes("bouché") || text.includes("bouchée") || text.includes("canalisation") || text.includes("refoul")) {
         problemType = "une canalisation bouchée";
-      } else if (text.includes("chauffe") || text.includes("chaude") || text.includes("ballon") || text.includes("cumulus")) {
-        problemType = "un problème de chauffe-eau";
+        if (text.includes("évier")) problemType = "un évier bouché";
+        else if (text.includes("toilette") || text.includes("wc")) problemType = "des toilettes bouchées";
+        else if (text.includes("douche") || text.includes("baignoire")) problemType = "une douche qui s'évacue plus";
+        empathy = pick([
+          "Ah oui, c'est pas agréable du tout.",
+          "OK je vois, c'est le genre de truc qui attend pas.",
+        ]);
+      } else if (text.includes("chauffe-eau") || text.includes("chauffe eau") || text.includes("eau chaude") || text.includes("ballon") || text.includes("cumulus")) {
+        problemType = "un souci de chauffe-eau";
+        empathy = pick([
+          "Ah oui, pas d'eau chaude c'est vraiment galère.",
+          "Je comprends, c'est pas le genre de truc qu'on peut repousser.",
+        ]);
       } else if (text.includes("chasse") || text.includes("wc") || text.includes("toilette")) {
-        problemType = "un problème de chasse d'eau";
+        problemType = "un problème de toilettes";
+        empathy = pick([
+          "OK, c'est embêtant ça.",
+          "D'accord, pas idéal.",
+        ]);
       } else if (text.includes("radiateur") || text.includes("chauffage") || text.includes("chaudière")) {
         problemType = "un problème de chauffage";
+        empathy = pick([
+          "Ah, surtout en ce moment c'est pas le moment de pas avoir de chauffage.",
+          "Oui, c'est pas drôle ça.",
+        ]);
       } else if (text.includes("robinet") || text.includes("mitigeur")) {
-        problemType = "un problème de robinet";
+        problemType = "un souci de robinet";
+        empathy = pick([
+          "OK, je vois.",
+          "D'accord.",
+        ]);
+      } else if (text.includes("tuyau") || text.includes("raccord")) {
+        problemType = "un problème de tuyauterie";
+        empathy = "D'accord, je note.";
+      } else {
+        // Generic problem - still sounds natural
+        problemType = "";
+        empathy = "OK, je vois.";
       }
 
-      ctx.problem = problemType;
+      const isUrgent = text.includes("urgent") || text.includes("inond") || text.includes("partout") || text.includes("catastrophe") || text.includes("dégât") || text.includes("vite");
+      if (isUrgent) ctx.urgency = "urgent";
 
-      // Check urgency
-      const isUrgent = text.includes("urgent") || text.includes("inond") || text.includes("partout") || text.includes("vite") || text.includes("tout de suite");
-
-      let response = `D'accord, je note ${problemType}. `;
-      if (isUrgent) {
-        ctx.urgency = "urgent";
-        response += "Je comprends que c'est urgent. Si possible, coupez l'arrivée d'eau en attendant. Martin va vous rappeler en priorité. ";
+      if (problemType) {
+        ctx.problem = problemType;
+      } else {
+        ctx.problem = userText;
       }
-      response += "Quel est votre nom, s'il vous plaît ?";
+
+      const response = `${empathy}${tip} ${pick([
+        "Je vais transmettre tout ça à Martin. C'est à quel nom ?",
+        "OK, je note ça pour Martin. Vous vous appelez comment ?",
+        "Martin va s'occuper de ça. Donnez-moi votre nom, je lui transmets.",
+      ])}`;
 
       return {
-        response,
+        response: response.trim(),
+        nextState: "waiting_name",
+        updatedContext: ctx,
+      };
+    }
+
+    case "clarifying_problem": {
+      ctx.problem = userText;
+      return {
+        response: pick([
+          "OK c'est noté. Et c'est à quel nom ?",
+          "D'accord, je transmets ça. Vous vous appelez comment ?",
+        ]),
         nextState: "waiting_name",
         updatedContext: ctx,
       };
@@ -91,59 +193,94 @@ function getAssistantResponse(
     case "waiting_name": {
       if (text.length < 2) {
         return {
-          response: "Excusez-moi, pouvez-vous me répéter votre nom ?",
+          response: "Pardon, j'ai pas bien capté votre nom. Vous pouvez me le répéter ?",
           nextState: "waiting_name",
           updatedContext: ctx,
         };
       }
 
-      // Capitalize first letter of each word
-      ctx.name = userText
+      // Clean up common speech artifacts
+      let name = userText
+        .replace(/^(je m'appelle |c'est |moi c'est |mon nom c'est |oui |alors )/i, "")
+        .trim();
+
+      // Capitalize
+      name = name
         .split(" ")
         .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
         .join(" ");
 
+      ctx.name = name;
+
       return {
-        response: `Merci ${ctx.name}. Et quelle est votre adresse pour l'intervention ?`,
+        response: pick([
+          `${name}, OK c'est noté. Et vous êtes où ? C'est quoi l'adresse pour l'intervention ?`,
+          `Très bien ${name}. Et c'est à quelle adresse chez vous ?`,
+          `OK ${name}. Vous habitez où exactement, que je note l'adresse pour Martin ?`,
+        ]),
         nextState: "waiting_address",
         updatedContext: ctx,
       };
     }
 
     case "waiting_address": {
-      if (text.length < 5) {
+      if (text.length < 3) {
         return {
-          response: "Pouvez-vous me donner votre adresse complète, s'il vous plaît ?",
+          response: "J'ai pas bien entendu l'adresse. Vous pouvez me la redonner ?",
           nextState: "waiting_address",
           updatedContext: ctx,
         };
       }
 
-      ctx.address = userText;
+      let address = userText
+        .replace(/^(c'est le |c'est au |au |j'habite |j'habite au |je suis au )/i, "")
+        .trim();
+      ctx.address = address;
 
       return {
-        response: `Très bien. Et à quel numéro Martin peut-il vous rappeler ?`,
+        response: pick([
+          `OK, ${address}. Et le meilleur numéro pour vous rappeler, c'est celui-ci ou vous en avez un autre ?`,
+          `C'est noté. À quel numéro Martin peut vous joindre ?`,
+          `Parfait. Et il vous rappelle à quel numéro ? Celui-là ou un autre ?`,
+        ]),
         nextState: "waiting_phone",
         updatedContext: ctx,
       };
     }
 
     case "waiting_phone": {
-      ctx.phone = userText;
+      // Handle "celui-ci" / "oui" / "le même" type answers
+      if (text.includes("celui") || text.includes("même") || text.includes("oui") || text.includes("ce numéro")) {
+        ctx.phone = "ce numéro";
+      } else {
+        ctx.phone = userText;
+      }
 
-      const urgencyText = ctx.urgency === "urgent" ? " en priorité" : " dans les plus brefs délais";
+      const urgencyMsg = ctx.urgency === "urgent"
+        ? " Vu que c'est urgent, il va vous rappeler en priorité."
+        : "";
+
+      const tipMsg = ctx.urgency === "urgent" && (ctx.problem?.includes("fuite") || ctx.problem?.includes("eau"))
+        ? " Et pensez à couper l'eau en attendant, hein."
+        : "";
 
       return {
-        response: `Parfait, j'ai bien tout noté. ${ctx.name}, ${ctx.problem}, au ${ctx.address}. Martin va vous rappeler${urgencyText} au ${ctx.phone}. ${ctx.urgency === "urgent" ? "En attendant, pensez bien à couper l'arrivée d'eau si c'est possible. " : ""}Bonne journée !`,
+        response: pick([
+          `Super, j'ai tout noté. Donc ${ctx.name}, ${ctx.problem}, au ${ctx.address}. Martin vous rappelle dès qu'il sort du chantier.${urgencyMsg}${tipMsg} Bonne journée !`,
+          `C'est parfait, je transmets tout à Martin. ${ctx.name}, ${ctx.problem}, ${ctx.address}. Il vous recontacte très vite.${urgencyMsg}${tipMsg} Bonne journée à vous !`,
+          `OK c'est bon pour moi. Je résume : ${ctx.name}, ${ctx.problem}, ${ctx.address}. Martin va vous rappeler.${urgencyMsg}${tipMsg} Passez une bonne journée !`,
+        ]),
         nextState: "ended",
         updatedContext: ctx,
       };
     }
 
-    case "confirming":
     case "ended": {
       return {
-        response: "Merci pour votre appel. Martin va vous rappeler très vite. Bonne journée !",
+        response: pick([
+          "C'est tout bon, Martin va vous rappeler. Bonne journée !",
+          "C'est noté, il vous recontacte bientôt. Au revoir !",
+        ]),
         nextState: "ended",
         updatedContext: ctx,
       };
@@ -152,7 +289,7 @@ function getAssistantResponse(
     default: {
       ctx.problem = userText;
       return {
-        response: `D'accord, je note votre demande. Quel est votre nom, s'il vous plaît ?`,
+        response: `OK je vois. Je transmets ça à Martin. C'est à quel nom ?`,
         nextState: "waiting_name",
         updatedContext: ctx,
       };
@@ -164,13 +301,24 @@ export default function VoiceDemo() {
   const [callActive, setCallActive] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [conversationState, setConversationState] = useState<ConversationState>("idle");
-  const [context, setContext] = useState<Record<string, string>>({});
   const [currentTranscript, setCurrentTranscript] = useState("");
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  const recognitionRef = useRef<ReturnType<typeof createRecognition> | null>(null);
+  // Use refs for conversation state to avoid stale closures
+  const stateRef = useRef<ConversationState>("idle");
+  const contextRef = useRef<Record<string, string>>({});
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Load voices on mount
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
+    }
+  }, []);
 
   const scrollToBottom = useCallback(() => {
     setTimeout(() => {
@@ -187,14 +335,15 @@ export default function VoiceDemo() {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "fr-FR";
-    utterance.rate = 1.0;
+    utterance.rate = 0.95; // Slightly slower = more natural
     utterance.pitch = 1.0;
 
-    // Try to find a French voice
     const voices = window.speechSynthesis.getVoices();
-    const frenchVoice = voices.find(
-      (v) => v.lang.startsWith("fr") && v.name.toLowerCase().includes("google")
-    ) || voices.find((v) => v.lang.startsWith("fr"));
+    // Prefer Google French voice (most natural), then any French voice
+    const frenchVoice =
+      voices.find((v) => v.lang.startsWith("fr") && v.name.toLowerCase().includes("google")) ||
+      voices.find((v) => v.lang === "fr-FR") ||
+      voices.find((v) => v.lang.startsWith("fr"));
     if (frenchVoice) utterance.voice = frenchVoice;
 
     utterance.onstart = () => setIsSpeaking(true);
@@ -213,13 +362,13 @@ export default function VoiceDemo() {
   const startListening = useCallback(() => {
     if (typeof window === "undefined") return;
 
-    const SpeechRecognition =
+    const SpeechRecognitionAPI =
       (window as unknown as Record<string, unknown>).SpeechRecognition ||
       (window as unknown as Record<string, unknown>).webkitSpeechRecognition;
 
-    if (!SpeechRecognition) return;
+    if (!SpeechRecognitionAPI) return;
 
-    const recognition = new (SpeechRecognition as new () => SpeechRecognitionInstance)();
+    const recognition = new (SpeechRecognitionAPI as new () => SpeechRecognitionInstance)();
     recognition.lang = "fr-FR";
     recognition.continuous = false;
     recognition.interimResults = true;
@@ -239,32 +388,26 @@ export default function VoiceDemo() {
         setMessages((prev) => [...prev, userMessage]);
         scrollToBottom();
 
-        // Get AI response
-        setConversationState((prevState) => {
-          setContext((prevContext) => {
-            const { response, nextState, updatedContext } = getAssistantResponse(
-              transcript,
-              prevState,
-              prevContext
-            );
+        // Use refs to get current state (no stale closures)
+        const { response, nextState, updatedContext } = getAssistantResponse(
+          transcript,
+          stateRef.current,
+          contextRef.current
+        );
 
-            const assistantMessage: Message = { role: "assistant", text: response };
-            setMessages((prev) => [...prev, assistantMessage]);
-            scrollToBottom();
+        // Update refs immediately
+        stateRef.current = nextState;
+        contextRef.current = updatedContext;
 
-            speak(response, () => {
-              if (nextState !== "ended") {
-                setTimeout(() => startListening(), 500);
-              }
-            });
+        const assistantMessage: Message = { role: "assistant", text: response };
+        setMessages((prev) => [...prev, assistantMessage]);
+        scrollToBottom();
 
-            setContext(updatedContext);
-            return updatedContext;
-          });
-          return prevState;
+        speak(response, () => {
+          if (nextState !== "ended") {
+            setTimeout(() => startListening(), 400);
+          }
         });
-
-        return "waiting_problem" as ConversationState;
       }
     };
 
@@ -285,17 +428,20 @@ export default function VoiceDemo() {
   const startCall = useCallback(() => {
     setCallActive(true);
     setMessages([]);
-    setConversationState("greeting");
-    setContext({});
+    stateRef.current = "greeting";
+    contextRef.current = {};
 
-    const greeting =
-      "Bonjour, vous êtes bien chez Martin Plomberie ! Martin est actuellement sur un chantier, mais je suis son assistant. Comment puis-je vous aider ?";
+    const greeting = pick([
+      "Bonjour, Martin Plomberie ! Martin est sur un chantier là, mais je peux prendre votre demande. Qu'est-ce qui se passe ?",
+      "Allô, Martin Plomberie bonjour ! Martin est pas disponible pour le moment, je suis son assistant. Dites-moi, c'est pour quoi ?",
+      "Oui bonjour, Martin Plomberie ! Martin est en intervention, mais dites-moi ce qu'il vous arrive, je lui transmets.",
+    ]);
 
     const assistantMessage: Message = { role: "assistant", text: greeting };
     setMessages([assistantMessage]);
 
     speak(greeting, () => {
-      setConversationState("waiting_problem");
+      stateRef.current = "waiting_problem";
       startListening();
     });
   }, [speak, startListening]);
@@ -305,9 +451,10 @@ export default function VoiceDemo() {
     setIsListening(false);
     setIsSpeaking(false);
     setCurrentTranscript("");
-    setConversationState("idle");
+    stateRef.current = "idle";
+    contextRef.current = {};
     if (recognitionRef.current) {
-      recognitionRef.current.stop();
+      try { recognitionRef.current.stop(); } catch {}
     }
     window.speechSynthesis?.cancel();
   }, []);
@@ -337,10 +484,10 @@ export default function VoiceDemo() {
             Démo — Martin Plomberie
           </h1>
           <p className="text-gray-600">
-            Parlez à l&apos;assistant comme si vous étiez un client avec un problème de plomberie.
+            Parlez comme si vous appeliez un plombier. Dites votre problème, l&apos;assistant gère le reste.
           </p>
           <p className="text-sm text-gray-400 mt-2">
-            Utilisez Chrome pour une meilleure expérience vocale.
+            Fonctionne sur Chrome. Autorisez le micro quand demandé.
           </p>
         </div>
 
@@ -359,34 +506,35 @@ export default function VoiceDemo() {
                   ? "L'assistant parle..."
                   : isListening
                     ? "À vous de parler..."
-                    : "En communication"}
+                    : "En ligne"}
             </p>
           </div>
 
           {/* Messages */}
           {callActive && (
-            <div className="bg-gray-800 rounded-2xl p-4 mb-6 h-64 overflow-y-auto">
+            <div className="bg-gray-800 rounded-2xl p-4 mb-6 h-72 overflow-y-auto">
               {messages.map((msg, i) => (
                 <div
                   key={i}
                   className={`mb-3 ${msg.role === "user" ? "text-right" : "text-left"}`}
                 >
-                  <span
-                    className={`inline-block px-3 py-2 rounded-2xl text-sm max-w-[85%] ${
-                      msg.role === "user"
-                        ? "bg-emerald-600 text-white"
-                        : "bg-gray-700 text-gray-200"
-                    }`}
-                  >
+                  <div className={`inline-block px-3 py-2 rounded-2xl text-sm max-w-[85%] ${
+                    msg.role === "user"
+                      ? "bg-emerald-600 text-white"
+                      : "bg-gray-700 text-gray-200"
+                  }`}>
+                    {msg.role === "assistant" && (
+                      <span className="text-emerald-400 text-xs block mb-1">Assistant</span>
+                    )}
                     {msg.text}
-                  </span>
+                  </div>
                 </div>
               ))}
               {currentTranscript && (
                 <div className="mb-3 text-right">
-                  <span className="inline-block px-3 py-2 rounded-2xl text-sm bg-emerald-600/50 text-white/70 max-w-[85%]">
+                  <div className="inline-block px-3 py-2 rounded-2xl text-sm bg-emerald-600/40 text-white/70 max-w-[85%]">
                     {currentTranscript}...
-                  </span>
+                  </div>
                 </div>
               )}
               <div ref={messagesEndRef} />
@@ -398,7 +546,7 @@ export default function VoiceDemo() {
             {!callActive ? (
               <button
                 onClick={startCall}
-                className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500 hover:bg-emerald-400 transition-colors shadow-lg shadow-emerald-500/30"
+                className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500 hover:bg-emerald-400 transition-colors shadow-lg shadow-emerald-500/30 active:scale-95"
               >
                 <Phone size={28} className="text-white" />
               </button>
@@ -407,23 +555,26 @@ export default function VoiceDemo() {
                 <button
                   onClick={() => {
                     if (isListening) {
-                      recognitionRef.current?.stop();
+                      try { recognitionRef.current?.stop(); } catch {}
                       setIsListening(false);
-                    } else {
+                    } else if (!isSpeaking) {
                       startListening();
                     }
                   }}
+                  disabled={isSpeaking}
                   className={`flex h-14 w-14 items-center justify-center rounded-full transition-colors ${
                     isListening
                       ? "bg-emerald-500 animate-pulse shadow-lg shadow-emerald-500/30"
-                      : "bg-gray-700 hover:bg-gray-600"
+                      : isSpeaking
+                        ? "bg-gray-800 cursor-not-allowed"
+                        : "bg-gray-700 hover:bg-gray-600"
                   }`}
                 >
                   {isListening ? <Mic size={24} className="text-white" /> : <MicOff size={24} className="text-gray-300" />}
                 </button>
                 <button
                   onClick={endCall}
-                  className="flex h-14 w-14 items-center justify-center rounded-full bg-red-500 hover:bg-red-400 transition-colors"
+                  className="flex h-14 w-14 items-center justify-center rounded-full bg-red-500 hover:bg-red-400 transition-colors active:scale-95"
                 >
                   <PhoneOff size={24} className="text-white" />
                 </button>
@@ -438,11 +589,11 @@ export default function VoiceDemo() {
           <ul className="space-y-2 text-sm text-gray-600">
             <li className="flex items-start gap-2">
               <span className="text-emerald-500 mt-0.5">•</span>
-              &quot;Bonjour, j&apos;ai une fuite sous mon évier&quot;
+              &quot;J&apos;ai une fuite sous mon évier, ça coule partout&quot;
             </li>
             <li className="flex items-start gap-2">
               <span className="text-emerald-500 mt-0.5">•</span>
-              &quot;Mon chauffe-eau ne marche plus&quot;
+              &quot;Mon chauffe-eau marche plus, j&apos;ai pas d&apos;eau chaude depuis ce matin&quot;
             </li>
             <li className="flex items-start gap-2">
               <span className="text-emerald-500 mt-0.5">•</span>
@@ -450,7 +601,7 @@ export default function VoiceDemo() {
             </li>
             <li className="flex items-start gap-2">
               <span className="text-emerald-500 mt-0.5">•</span>
-              &quot;J&apos;ai mes toilettes bouchées, c&apos;est urgent&quot;
+              &quot;Mes toilettes sont bouchées, c&apos;est urgent&quot;
             </li>
           </ul>
         </div>
@@ -458,7 +609,7 @@ export default function VoiceDemo() {
         {/* CTA */}
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-500 mb-3">
-            Vous êtes artisan ? Imaginez ça avec votre nom et votre métier.
+            Vous êtes artisan ? Imaginez ça avec le nom de votre entreprise.
           </p>
           <a
             href="mailto:shopbot.ai.pro@gmail.com?subject=AlloPro AI — Je veux tester"
@@ -501,8 +652,4 @@ interface SpeechRecognitionInstance {
   onresult: ((event: SpeechRecognitionEvent) => void) | null;
   onerror: ((event: unknown) => void) | null;
   onend: (() => void) | null;
-}
-
-function createRecognition(): SpeechRecognitionInstance {
-  return null as unknown as SpeechRecognitionInstance;
 }
