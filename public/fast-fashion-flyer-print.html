@@ -20,330 +20,523 @@
             height: 297mm;
             position: relative;
             overflow: hidden;
-            background: #faf3eb;
+            background: #fdf6ee;
         }
 
-        /* TOP BANNER - big colored block */
-        .top-banner {
-            background: #c0392b;
-            height: 110mm;
+        /* ============ TOP HERO ============ */
+        .hero {
+            height: 95mm;
             position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #2c3e50 0%, #000 100%);
+        }
+
+        /* Fake clothing image overlay pattern */
+        .hero-pattern {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(192,57,43,0.08) 20px, rgba(192,57,43,0.08) 40px),
+                repeating-linear-gradient(-45deg, transparent, transparent 30px, rgba(255,255,255,0.03) 30px, rgba(255,255,255,0.03) 60px);
+        }
+
+        /* Decorative shapes */
+        .hero-circle1 {
+            position: absolute; top: -30px; right: -30px;
+            width: 160px; height: 160px;
+            border: 15px solid rgba(192,57,43,0.4);
+            border-radius: 50%;
+        }
+        .hero-circle2 {
+            position: absolute; bottom: -20px; left: 30px;
+            width: 80px; height: 80px;
+            background: rgba(243,156,18,0.25);
+            border-radius: 50%;
+        }
+        .hero-circle3 {
+            position: absolute; top: 30px; left: -20px;
+            width: 100px; height: 100px;
+            border: 8px solid rgba(255,255,255,0.06);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
             display: flex;
-            align-items: center;
-            justify-content: center;
             flex-direction: column;
+            justify-content: center;
+            padding: 0 35px;
         }
 
-        .top-banner::after {
-            content: '';
-            position: absolute;
-            bottom: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 40px solid transparent;
-            border-right: 40px solid transparent;
-            border-top: 30px solid #c0392b;
-        }
-
-        /* Decorative circles */
-        .deco1 {
-            position: absolute;
-            top: -40px;
-            left: -40px;
-            width: 140px;
-            height: 140px;
-            background: rgba(0,0,0,0.1);
-            border-radius: 50%;
-        }
-
-        .deco2 {
-            position: absolute;
-            top: 20px;
-            right: -30px;
-            width: 100px;
-            height: 100px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 50%;
-        }
-
-        .deco3 {
-            position: absolute;
-            bottom: 10px;
-            right: 40px;
-            width: 60px;
-            height: 60px;
-            background: rgba(0,0,0,0.08);
-            border-radius: 50%;
-        }
-
-        .top-banner h1 {
-            font-size: 52pt;
-            font-weight: 900;
-            color: #fff;
-            margin: 0;
-            letter-spacing: -2px;
-            text-transform: uppercase;
-            position: relative;
-            z-index: 2;
-        }
-
-        .top-banner h2 {
-            font-size: 15pt;
-            font-weight: 400;
-            color: rgba(255,255,255,0.85);
-            margin: 5px 0 0;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            position: relative;
-            z-index: 2;
-        }
-
-        .top-tag {
-            position: relative;
-            z-index: 2;
-            background: #000;
+        .hero-tag {
+            display: inline-block;
+            background: #c0392b;
             color: #fff;
             font-size: 7pt;
             font-weight: bold;
             letter-spacing: 3px;
             text-transform: uppercase;
-            padding: 5px 16px;
-            margin-bottom: 12px;
+            padding: 4px 14px;
+            margin-bottom: 10px;
+            width: fit-content;
         }
 
-        /* MIDDLE CONTENT */
-        .content {
-            padding: 40px 30px 20px;
+        .hero h1 {
+            font-size: 48pt;
+            font-weight: 900;
+            color: #fff;
+            margin: 0;
+            letter-spacing: -1px;
+            line-height: 1;
         }
 
-        .quote {
-            text-align: center;
-            font-size: 13pt;
-            font-style: italic;
-            color: #555;
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
+        .hero h1 span { color: #e74c3c; }
 
-        .quote strong {
-            color: #c0392b;
-            font-style: normal;
-        }
-
-        /* BIG NUMBERS ROW */
-        .numbers {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 25px;
-        }
-
-        .number-item {
-            text-align: center;
-            width: 22%;
-        }
-
-        .number-circle {
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            margin: 0 auto 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .hero h2 {
             font-size: 14pt;
-            font-weight: 900;
-            color: #fff;
-        }
-
-        .nc-red { background: #c0392b; }
-        .nc-dark { background: #2c3e50; }
-        .nc-orange { background: #d35400; }
-        .nc-green { background: #27ae60; }
-
-        .number-item .num-label {
-            font-size: 7.5pt;
-            color: #888;
+            font-weight: 300;
+            color: #f39c12;
+            margin: 8px 0 0;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            line-height: 1.3;
         }
 
-        /* PROBLEMS & SOLUTIONS - side by side */
-        .two-sides {
+        /* Clothing icons row in hero */
+        .hero-icons {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
             display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
+            flex-direction: column;
+            gap: 8px;
+            opacity: 0.6;
         }
 
-        .side {
+        .hero-icons svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        /* ============ QUOTE STRIP ============ */
+        .quote-strip {
+            background: #c0392b;
+            padding: 10px 35px;
+            text-align: center;
+        }
+
+        .quote-strip p {
+            font-size: 10pt;
+            color: #fff;
+            margin: 0;
+            font-style: italic;
+            letter-spacing: 0.5px;
+        }
+
+        .quote-strip strong {
+            font-style: normal;
+            text-decoration: underline;
+        }
+
+        /* ============ STATS SECTION ============ */
+        .stats-section {
+            padding: 18px 25px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .stat-card {
             flex: 1;
-            padding: 18px;
+            text-align: center;
+            padding: 14px 8px;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .side-problem {
-            background: #2c3e50;
-            color: #fff;
+        .stat-card.s1 { background: linear-gradient(135deg, #2980b9, #3498db); }
+        .stat-card.s2 { background: linear-gradient(135deg, #c0392b, #e74c3c); }
+        .stat-card.s3 { background: linear-gradient(135deg, #d35400, #e67e22); }
+        .stat-card.s4 { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+
+        .stat-card svg {
+            width: 28px;
+            height: 28px;
+            margin-bottom: 4px;
         }
 
-        .side-solution {
-            background: #27ae60;
-            color: #fff;
-        }
-
-        .side h3 {
-            font-size: 13pt;
+        .stat-card .stat-num {
+            font-size: 18pt;
             font-weight: 900;
-            margin: 0 0 10px;
+            color: #fff;
+            margin: 2px 0;
+        }
+
+        .stat-card .stat-label {
+            font-size: 6pt;
+            color: rgba(255,255,255,0.85);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .side ul {
+        /* ============ MIDDLE CONTENT ============ */
+        .mid-section {
+            padding: 5px 25px 12px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .mid-card {
+            flex: 1;
+            padding: 16px;
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .mid-card.problem {
+            background: #2c3e50;
+            color: #fff;
+        }
+
+        .mid-card.solution {
+            background: #27ae60;
+            color: #fff;
+        }
+
+        .mid-card .card-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .mid-card .card-header svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .mid-card h3 {
+            font-size: 12pt;
+            font-weight: 900;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .mid-card ul {
             margin: 0;
             padding: 0;
             list-style: none;
         }
 
-        .side ul li {
-            font-size: 9pt;
-            padding: 5px 0;
+        .mid-card li {
+            font-size: 8.5pt;
+            padding: 6px 0;
             border-bottom: 1px solid rgba(255,255,255,0.15);
-            line-height: 1.5;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .side ul li:last-child {
-            border-bottom: none;
+        .mid-card li:last-child { border-bottom: none; }
+
+        .mid-card li svg {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
         }
 
-        .side ul li .bullet {
+        /* ============ VISUAL STRIP ============ */
+        .visual-strip {
+            margin: 0 25px 12px;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            height: 32mm;
+        }
+
+        .vis-block {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .vis-block.v1 {
+            background: linear-gradient(180deg, #1a5276, #2980b9);
+        }
+        .vis-block.v2 {
+            background: linear-gradient(180deg, #7b241c, #c0392b);
+        }
+        .vis-block.v3 {
+            background: linear-gradient(180deg, #1e8449, #27ae60);
+        }
+
+        .vis-block svg {
+            width: 36px;
+            height: 36px;
+            margin-bottom: 5px;
+        }
+
+        .vis-block .vis-title {
+            font-size: 9pt;
             font-weight: 900;
-            margin-right: 6px;
-        }
-
-        .side-problem .bullet { color: #e74c3c; }
-        .side-solution .bullet { color: #2ecc71; }
-
-        /* BOTTOM FOOTER */
-        .bottom-bar {
-            background: #c0392b;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 20px 30px;
-            text-align: center;
             color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .bottom-bar .cta {
+        .vis-block .vis-sub {
+            font-size: 7pt;
+            color: rgba(255,255,255,0.7);
+            margin-top: 2px;
+        }
+
+        /* ============ BOTTOM CTA ============ */
+        .bottom {
+            background: linear-gradient(135deg, #1a1a2e, #2c3e50);
+            margin: 0 25px;
+            border-radius: 12px;
+            padding: 18px 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bottom-deco {
+            position: absolute;
+            top: -20px; right: -20px;
+            width: 80px; height: 80px;
+            background: rgba(46,204,113,0.15);
+            border-radius: 50%;
+        }
+
+        .bottom .cta {
             font-size: 18pt;
             font-weight: 900;
+            color: #2ecc71;
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 4px;
+            position: relative;
         }
 
-        .bottom-bar .sub {
+        .bottom .sub {
             font-size: 8.5pt;
-            color: rgba(255,255,255,0.75);
-            letter-spacing: 1px;
-        }
-
-        .bottom-bar .hashtags {
-            margin-top: 8px;
-            font-size: 7.5pt;
             color: rgba(255,255,255,0.6);
-            letter-spacing: 0.5px;
+            position: relative;
         }
 
-        .author-badge {
-            position: absolute;
-            bottom: 75px;
-            right: 30px;
-            background: #2c3e50;
-            color: #fff;
+        .bottom .hashtags {
+            margin-top: 8px;
             font-size: 7pt;
-            font-weight: bold;
-            padding: 5px 14px;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+
+        /* ============ AUTHOR ============ */
+        .author {
+            text-align: center;
+            padding: 8px;
+            font-size: 7pt;
+            color: #aaa;
             letter-spacing: 1px;
-            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
     <div class="page">
 
-        <!-- TOP BANNER -->
-        <div class="top-banner">
-            <div class="deco1"></div>
-            <div class="deco2"></div>
-            <div class="deco3"></div>
-            <div class="top-tag">Wake up call</div>
-            <h1>Fast Fashion</h1>
-            <h2>Think before you buy</h2>
+        <!-- ======= HERO ======= -->
+        <div class="hero">
+            <div class="hero-pattern"></div>
+            <div class="hero-circle1"></div>
+            <div class="hero-circle2"></div>
+            <div class="hero-circle3"></div>
+
+            <div class="hero-content">
+                <div class="hero-tag">Wake Up Call</div>
+                <h1>FAST<br><span>FASHION</span></h1>
+                <h2>Think before you buy</h2>
+            </div>
+
+            <!-- Clothing SVG icons -->
+            <div class="hero-icons">
+                <!-- T-Shirt -->
+                <svg viewBox="0 0 64 64" fill="none">
+                    <path d="M20 8L8 20V28H18V56H46V28H56V20L44 8H38C38 12.4 34.4 16 30 16H34C29.6 16 26 12.4 26 8H20Z" stroke="white" stroke-width="2" fill="none"/>
+                </svg>
+                <!-- Hanger -->
+                <svg viewBox="0 0 64 64" fill="none">
+                    <path d="M32 16V12C32 8 36 6 38 8" stroke="white" stroke-width="2" fill="none"/>
+                    <path d="M10 40L32 24L54 40" stroke="white" stroke-width="2" fill="none"/>
+                    <line x1="10" y1="40" x2="54" y2="40" stroke="white" stroke-width="2"/>
+                </svg>
+                <!-- Shopping bag -->
+                <svg viewBox="0 0 64 64" fill="none">
+                    <rect x="12" y="24" width="40" height="34" rx="2" stroke="white" stroke-width="2" fill="none"/>
+                    <path d="M22 24V16C22 10.5 26.5 6 32 6C37.5 6 42 10.5 42 16V24" stroke="white" stroke-width="2" fill="none"/>
+                </svg>
+            </div>
         </div>
 
-        <!-- CONTENT -->
-        <div class="content">
+        <!-- ======= QUOTE STRIP ======= -->
+        <div class="quote-strip">
+            <p>"Clothes made fast. Sold cheap. Worn once. <strong>Thrown away.</strong>"</p>
+        </div>
 
-            <div class="quote">
-                "Clothes made fast. Sold cheap. Worn once. <strong>Thrown away.</strong>"
+        <!-- ======= STATS ======= -->
+        <div class="stats-section">
+            <!-- Water -->
+            <div class="stat-card s1">
+                <svg viewBox="0 0 48 48" fill="white">
+                    <path d="M24 4C24 4 10 22 10 30C10 38 16.3 44 24 44C31.7 44 38 38 38 30C38 22 24 4 24 4Z" opacity="0.9"/>
+                </svg>
+                <div class="stat-num">7,000L</div>
+                <div class="stat-label">Water / 1 jeans</div>
             </div>
-
-            <!-- 4 KEY NUMBERS -->
-            <div class="numbers">
-                <div class="number-item">
-                    <div class="number-circle nc-red">7K</div>
-                    <div class="num-label">Litres of water<br>for 1 jeans</div>
-                </div>
-                <div class="number-item">
-                    <div class="number-circle nc-dark">92M</div>
-                    <div class="num-label">Tons of textile<br>waste per year</div>
-                </div>
-                <div class="number-item">
-                    <div class="number-circle nc-orange">10%</div>
-                    <div class="num-label">Of global<br>CO2 emissions</div>
-                </div>
-                <div class="number-item">
-                    <div class="number-circle nc-green">$2</div>
-                    <div class="num-label">Average worker<br>pay per day</div>
-                </div>
+            <!-- Waste -->
+            <div class="stat-card s2">
+                <svg viewBox="0 0 48 48" fill="white">
+                    <path d="M14 16H34L32 42H16L14 16Z" opacity="0.9"/>
+                    <rect x="10" y="12" width="28" height="4" rx="1" opacity="0.9"/>
+                    <line x1="20" y1="16" x2="20" y2="12" stroke="white" stroke-width="2"/>
+                    <line x1="28" y1="16" x2="28" y2="12" stroke="white" stroke-width="2"/>
+                </svg>
+                <div class="stat-num">92M T</div>
+                <div class="stat-label">Waste / year</div>
             </div>
+            <!-- CO2 -->
+            <div class="stat-card s3">
+                <svg viewBox="0 0 48 48" fill="white">
+                    <circle cx="20" cy="24" r="8" opacity="0.7"/>
+                    <circle cx="30" cy="18" r="6" opacity="0.6"/>
+                    <circle cx="32" cy="28" r="7" opacity="0.5"/>
+                    <circle cx="24" cy="32" r="5" opacity="0.6"/>
+                </svg>
+                <div class="stat-num">10%</div>
+                <div class="stat-label">Global CO2</div>
+            </div>
+            <!-- Workers -->
+            <div class="stat-card s4">
+                <svg viewBox="0 0 48 48" fill="white">
+                    <circle cx="24" cy="14" r="6" opacity="0.9"/>
+                    <path d="M12 42C12 33.2 17.4 26 24 26C30.6 26 36 33.2 36 42" opacity="0.9"/>
+                </svg>
+                <div class="stat-num">$2</div>
+                <div class="stat-label">Worker pay / day</div>
+            </div>
+        </div>
 
-            <!-- PROBLEMS & SOLUTIONS -->
-            <div class="two-sides">
-                <div class="side side-problem">
+        <!-- ======= PROBLEM / SOLUTION ======= -->
+        <div class="mid-section">
+            <div class="mid-card problem">
+                <div class="card-header">
+                    <svg viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="14" stroke="#e74c3c" stroke-width="2"/>
+                        <line x1="8" y1="8" x2="24" y2="24" stroke="#e74c3c" stroke-width="2"/>
+                    </svg>
                     <h3>The Problem</h3>
-                    <ul>
-                        <li><span class="bullet">X</span> Pollutes water and creates waste</li>
-                        <li><span class="bullet">X</span> Workers earn very little money</li>
-                        <li><span class="bullet">X</span> Unsafe factories, long hours</li>
-                        <li><span class="bullet">X</span> Clothes thrown away after weeks</li>
-                    </ul>
                 </div>
-                <div class="side side-solution">
-                    <h3>The Solution</h3>
-                    <ul>
-                        <li><span class="bullet">+</span> Buy less, choose well</li>
-                        <li><span class="bullet">+</span> Shop second-hand (Vinted...)</li>
-                        <li><span class="bullet">+</span> Repair your clothes</li>
-                        <li><span class="bullet">+</span> Donate what you don't wear</li>
-                    </ul>
-                </div>
+                <ul>
+                    <li>
+                        <svg viewBox="0 0 20 20" fill="#e74c3c"><path d="M10 0L12 7H20L14 11L16 18L10 14L4 18L6 11L0 7H8Z"/></svg>
+                        Pollutes water and soil
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 20 20" fill="#e74c3c"><path d="M10 0L12 7H20L14 11L16 18L10 14L4 18L6 11L0 7H8Z"/></svg>
+                        Creates massive waste
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 20 20" fill="#e74c3c"><path d="M10 0L12 7H20L14 11L16 18L10 14L4 18L6 11L0 7H8Z"/></svg>
+                        Workers earn $2/day
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 20 20" fill="#e74c3c"><path d="M10 0L12 7H20L14 11L16 18L10 14L4 18L6 11L0 7H8Z"/></svg>
+                        Unsafe factories
+                    </li>
+                </ul>
             </div>
 
+            <div class="mid-card solution">
+                <div class="card-header">
+                    <svg viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="14" stroke="white" stroke-width="2"/>
+                        <path d="M10 16L14 20L22 12" stroke="white" stroke-width="2.5" fill="none"/>
+                    </svg>
+                    <h3>The Solution</h3>
+                </div>
+                <ul>
+                    <li>
+                        <svg viewBox="0 0 20 20" fill="white"><path d="M10 0C15.5 0 20 4.5 20 10C20 15.5 15.5 20 10 20C4.5 20 0 15.5 0 10C0 4.5 4.5 0 10 0ZM8 14L15 8L14 7L8 12L5 10L4 11L8 14Z"/></svg>
+                        Buy less, choose well
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 20 20" fill="white"><path d="M10 0C15.5 0 20 4.5 20 10C20 15.5 15.5 20 10 20C4.5 20 0 15.5 0 10C0 4.5 4.5 0 10 0ZM8 14L15 8L14 7L8 12L5 10L4 11L8 14Z"/></svg>
+                        Shop second-hand
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 20 20" fill="white"><path d="M10 0C15.5 0 20 4.5 20 10C20 15.5 15.5 20 10 20C4.5 20 0 15.5 0 10C0 4.5 4.5 0 10 0ZM8 14L15 8L14 7L8 12L5 10L4 11L8 14Z"/></svg>
+                        Repair your clothes
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 20 20" fill="white"><path d="M10 0C15.5 0 20 4.5 20 10C20 15.5 15.5 20 10 20C4.5 20 0 15.5 0 10C0 4.5 4.5 0 10 0ZM8 14L15 8L14 7L8 12L5 10L4 11L8 14Z"/></svg>
+                        Donate what you don't wear
+                    </li>
+                </ul>
+            </div>
         </div>
 
-        <div class="author-badge">Bilal Yousfi -- English Class</div>
+        <!-- ======= VISUAL STRIP ======= -->
+        <div class="visual-strip">
+            <div class="vis-block v1">
+                <!-- Earth icon -->
+                <svg viewBox="0 0 64 64" fill="none">
+                    <circle cx="32" cy="32" r="26" stroke="white" stroke-width="2"/>
+                    <path d="M14 20C18 18 24 22 28 18C32 14 36 20 42 16" stroke="white" stroke-width="1.5" fill="none"/>
+                    <path d="M10 34C16 30 22 38 28 32C34 26 40 36 54 30" stroke="white" stroke-width="1.5" fill="none"/>
+                    <path d="M16 46C22 42 28 48 34 44C40 40 46 44 50 42" stroke="white" stroke-width="1.5" fill="none"/>
+                </svg>
+                <div class="vis-title">Save the Planet</div>
+                <div class="vis-sub">Less waste, more life</div>
+            </div>
+            <div class="vis-block v2">
+                <!-- Heart icon -->
+                <svg viewBox="0 0 64 64" fill="white" opacity="0.9">
+                    <path d="M32 56L28 52C14 39.6 6 32.4 6 24C6 17.4 11.4 12 18 12C21.8 12 25.4 13.8 28 16.6L32 20.6L36 16.6C38.6 13.8 42.2 12 46 12C52.6 12 58 17.4 58 24C58 32.4 50 39.6 36 52L32 56Z"/>
+                </svg>
+                <div class="vis-title">Protect Workers</div>
+                <div class="vis-sub">Fair wages, safe jobs</div>
+            </div>
+            <div class="vis-block v3">
+                <!-- Recycle icon -->
+                <svg viewBox="0 0 64 64" fill="none" stroke="white" stroke-width="2.5">
+                    <path d="M22 12L32 4L42 12L37 12L32 8L27 12Z" fill="white"/>
+                    <path d="M32 8V28"/>
+                    <path d="M46 44L54 32L46 20L46 26L54 32L46 38Z" fill="white"/>
+                    <path d="M54 32H34"/>
+                    <path d="M18 44L10 32L18 20L18 26L10 32L18 38Z" fill="white"/>
+                    <path d="M10 32H30"/>
+                </svg>
+                <div class="vis-title">Recycle & Reuse</div>
+                <div class="vis-sub">Give clothes new life</div>
+            </div>
+        </div>
 
-        <!-- BOTTOM BAR -->
-        <div class="bottom-bar">
+        <!-- ======= BOTTOM CTA ======= -->
+        <div class="bottom">
+            <div class="bottom-deco"></div>
             <div class="cta">Your choices matter.</div>
             <div class="sub">Every purchase is a vote for the world you want to live in.</div>
             <div class="hashtags">#ThinkBeforeYouBuy &nbsp; #SustainableFashion &nbsp; #SayNoToFastFashion</div>
         </div>
+
+        <div class="author">BILAL YOUSFI -- ENGLISH CLASS</div>
 
     </div>
 </body>
