@@ -6,428 +6,431 @@
     <style>
         @page {
             size: A4;
-            margin: 1.2cm;
+            margin: 0;
         }
 
         body {
             font-family: Helvetica, Arial, sans-serif;
-            color: #222;
             margin: 0;
             padding: 0;
-            font-size: 11pt;
+            color: #fff;
+            background: #111;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            background: linear-gradient(160deg, #0d0d0d 0%, #1a1a2e 40%, #16213e 100%);
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative background shapes */
+        .bg-circle1 {
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(231,76,60,0.15) 0%, transparent 70%);
+        }
+
+        .bg-circle2 {
+            position: absolute;
+            bottom: -100px;
+            left: -100px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(46,204,113,0.12) 0%, transparent 70%);
+        }
+
+        /* HEADER */
+        .header {
+            text-align: center;
+            padding: 35px 30px 20px;
+            position: relative;
+        }
+
+        .header-tag {
+            display: inline-block;
+            background: #e74c3c;
+            color: #fff;
+            font-size: 8pt;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 6px 20px;
+        }
+
+        .header h1 {
+            font-size: 42pt;
+            font-weight: 900;
+            margin: 10px 0 0;
+            color: #e74c3c;
+            letter-spacing: -1px;
+        }
+
+        .header h2 {
+            font-size: 16pt;
+            font-weight: 300;
+            color: #f39c12;
+            font-style: italic;
+            margin: 2px 0 0;
+        }
+
+        .divider {
+            width: 60px;
+            height: 3px;
+            background: #e74c3c;
+            margin: 18px auto;
+        }
+
+        .intro {
+            font-size: 10pt;
+            color: #bbb;
+            text-align: center;
+            max-width: 80%;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* STATS ROW */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 25px auto 20px;
+            padding: 15px 0;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            width: 85%;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 22pt;
+            font-weight: 900;
+            color: #e74c3c;
+        }
+
+        .stat-txt {
+            font-size: 6.5pt;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        /* 3 COLUMNS SECTION */
+        .three-col {
+            display: flex;
+            gap: 15px;
+            padding: 0 25px;
+            margin-bottom: 22px;
+        }
+
+        .col-card {
+            flex: 1;
+            text-align: center;
+            padding: 18px 12px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+        }
+
+        .col-card .icon-circle {
+            width: 45px;
+            height: 45px;
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16pt;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .col-card .icon-circle.blue { background: #2980b9; }
+        .col-card .icon-circle.red { background: #c0392b; }
+        .col-card .icon-circle.orange { background: #d68910; }
+
+        .col-card h3 {
+            font-size: 10pt;
+            margin: 0 0 5px;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .col-card p {
+            font-size: 7.5pt;
+            color: #999;
+            margin: 0;
             line-height: 1.5;
         }
 
-        .flyer {
-            max-width: 100%;
-        }
-
-        /* HERO */
-        .hero {
+        /* IMPACT SECTION */
+        .section-label {
             text-align: center;
-            padding: 25px 20px;
-            background-color: #1a1a2e;
-            color: white;
-            margin-bottom: 12px;
-        }
-
-        .badge {
-            display: inline-block;
-            background-color: #e74c3c;
-            color: white;
-            padding: 5px 18px;
-            font-size: 9pt;
-            font-weight: bold;
-            letter-spacing: 2px;
+            font-size: 7pt;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .hero h1 {
-            font-size: 30pt;
-            margin: 5px 0;
             color: #e74c3c;
-        }
-
-        .hero .subtitle {
-            font-size: 18pt;
-            color: #f39c12;
-            font-style: italic;
-            margin-bottom: 12px;
-        }
-
-        .hero-intro {
-            font-size: 10.5pt;
-            color: #ccc;
-            max-width: 90%;
-            margin: 0 auto;
-            padding: 12px;
-            border-left: 4px solid #e74c3c;
-            text-align: left;
-        }
-
-        /* STATS */
-        .stats-bar {
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            margin-bottom: 12px;
-            background-color: #16213e;
-            color: white;
-        }
-
-        .stat {
-            text-align: center;
-            width: 24%;
-        }
-
-        .stat-number {
-            font-size: 16pt;
             font-weight: bold;
-            color: #e74c3c;
-        }
-
-        .stat-label {
-            font-size: 7.5pt;
-            color: #aaa;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* SECTION */
-        .section {
-            padding: 12px 15px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .section-title {
-            font-size: 15pt;
-            font-weight: bold;
-            margin: 0 0 10px 0;
+            text-align: center;
+            font-size: 18pt;
+            font-weight: 900;
+            margin: 0 0 15px;
+            color: #fff;
         }
 
-        /* WHY */
-        .why-section {
-            background-color: #eaf2f8;
-            border-left: 5px solid #3498db;
-        }
-
-        .why-section .section-title {
-            color: #2980b9;
-        }
-
-        .reasons-grid {
+        .impact-row {
             display: flex;
-            gap: 10px;
+            gap: 15px;
+            padding: 0 25px;
+            margin-bottom: 25px;
         }
 
-        .reason-card {
+        .impact-box {
             flex: 1;
-            background-color: white;
-            border: 1px solid #bdd7ee;
-            padding: 10px;
+            padding: 20px 15px;
             text-align: center;
         }
 
-        .card-icon {
-            font-size: 14pt;
-            font-weight: bold;
+        .impact-box.water {
+            background: rgba(231,76,60,0.12);
+            border-left: 3px solid #e74c3c;
+        }
+
+        .impact-box.workers {
+            background: rgba(243,156,18,0.12);
+            border-left: 3px solid #f39c12;
+        }
+
+        .impact-box .big-num {
+            font-size: 26pt;
+            font-weight: 900;
             margin-bottom: 3px;
         }
 
-        .reason-title {
-            font-weight: bold;
-            color: #2980b9;
-            font-size: 10.5pt;
-            margin: 3px 0;
-        }
+        .impact-box.water .big-num { color: #e74c3c; }
+        .impact-box.workers .big-num { color: #f39c12; }
 
-        .reason-text {
-            font-size: 8.5pt;
-            color: #555;
-        }
-
-        /* ENV */
-        .env-section {
-            background-color: #fdedec;
-            border-left: 5px solid #e74c3c;
-        }
-
-        .env-section .section-title {
-            color: #c0392b;
-        }
-
-        .impact-cards {
-            display: flex;
-            gap: 10px;
-        }
-
-        .impact-card {
-            flex: 1;
-            background-color: white;
-            border: 1px solid #f5b7b1;
-            padding: 12px;
-            text-align: center;
-        }
-
-        .impact-stat {
-            font-size: 18pt;
-            font-weight: bold;
-            color: #e74c3c;
-            margin: 5px 0;
-        }
-
-        .impact-desc {
-            font-size: 9pt;
-            color: #555;
-        }
-
-        /* WORKERS */
-        .workers-section {
-            background-color: #fef9e7;
-            border-left: 5px solid #f39c12;
-        }
-
-        .workers-section .section-title {
-            color: #d68910;
-        }
-
-        .workers-text p {
-            font-size: 10pt;
-            color: #444;
-            padding: 10px;
-            background-color: white;
-            border-left: 3px solid #f39c12;
-            margin: 0 0 8px 0;
-        }
-
-        .workers-facts {
-            display: flex;
-            gap: 8px;
-        }
-
-        .worker-fact {
-            flex: 1;
-            background-color: white;
-            border: 1px solid #f9e79f;
-            padding: 8px;
-            text-align: center;
-            font-size: 8.5pt;
-            color: #666;
-        }
-
-        .worker-fact strong {
-            display: block;
-            font-size: 9pt;
-            color: #d68910;
-            margin-bottom: 2px;
+        .impact-box .desc {
+            font-size: 8pt;
+            color: #aaa;
+            line-height: 1.5;
         }
 
         /* SOLUTIONS */
-        .solutions-section {
-            background-color: #eafaf1;
-            border-left: 5px solid #2ecc71;
+        .solutions {
+            background: rgba(46,204,113,0.08);
+            margin: 0 25px;
+            padding: 20px;
+            border: 1px solid rgba(46,204,113,0.2);
+            margin-bottom: 25px;
         }
 
-        .solutions-section .section-title {
-            color: #27ae60;
+        .solutions-title {
+            text-align: center;
+            font-size: 14pt;
+            font-weight: 900;
+            color: #2ecc71;
+            margin: 0 0 15px;
         }
 
         .solutions-grid {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .solution-card {
+        .sol-item {
             flex: 1;
-            background-color: white;
-            border: 2px solid #a9dfbf;
-            padding: 10px;
             text-align: center;
         }
 
-        .solution-title {
-            font-weight: bold;
-            color: #27ae60;
-            font-size: 10.5pt;
-            margin: 3px 0;
+        .sol-num {
+            width: 30px;
+            height: 30px;
+            background: #2ecc71;
+            color: #000;
+            font-size: 14pt;
+            font-weight: 900;
+            margin: 0 auto 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .solution-text {
-            font-size: 8.5pt;
-            color: #555;
-        }
-
-        /* FOOTER */
-        .footer-cta {
-            text-align: center;
-            padding: 18px;
-            background-color: #1a1a2e;
-            color: white;
-            margin-top: 10px;
-        }
-
-        .cta-text {
-            font-size: 20pt;
-            font-weight: bold;
-            color: #2ecc71;
-            margin-bottom: 6px;
-        }
-
-        .cta-sub {
-            font-size: 10pt;
-            color: #bbb;
-            margin-bottom: 10px;
-        }
-
-        .cta-hashtags {
+        .sol-item h4 {
             font-size: 9pt;
-            color: #ddd;
-            font-weight: bold;
+            margin: 0 0 3px;
+            color: #2ecc71;
         }
 
-        .author {
-            margin-top: 12px;
-            font-size: 8pt;
+        .sol-item p {
+            font-size: 7pt;
+            color: #999;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* FOOTER CTA */
+        .footer {
+            text-align: center;
+            padding: 10px 30px 30px;
+            position: relative;
+        }
+
+        .footer .cta {
+            font-size: 20pt;
+            font-weight: 900;
+            color: #2ecc71;
+            margin-bottom: 8px;
+        }
+
+        .footer .sub {
+            font-size: 9pt;
             color: #777;
+            margin-bottom: 12px;
+        }
+
+        .tags {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tag {
+            font-size: 7pt;
+            font-weight: bold;
+            color: #bbb;
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 4px 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .credits {
+            font-size: 7pt;
+            color: #555;
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
-    <div class="flyer">
-        <!-- HERO -->
-        <div class="hero">
-            <div class="badge">!! WAKE UP CALL !!</div>
+    <div class="page">
+        <div class="bg-circle1"></div>
+        <div class="bg-circle2"></div>
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-tag">!! Wake Up !!</div>
             <h1>FAST FASHION</h1>
-            <div class="subtitle">Think Before You Buy!</div>
-            <div class="hero-intro">
-                Fast fashion is a system where clothes are made very quickly and sold at low prices.
-                Brands produce many collections every year, so trends change very fast.
-                As a result, <strong>people buy more and more clothes than before.</strong>
-            </div>
+            <h2>Think Before You Buy</h2>
+            <div class="divider"></div>
+            <p class="intro">
+                Clothes made fast. Sold cheap. Worn once. Thrown away.<br>
+                This is fast fashion &mdash; and it's destroying our world.
+            </p>
         </div>
 
         <!-- STATS -->
-        <div class="stats-bar">
-            <div class="stat">
-                <div class="stat-number">7,000 L</div>
-                <div class="stat-label">Water per Jeans</div>
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-num">7,000L</div>
+                <div class="stat-txt">Water / 1 Jeans</div>
             </div>
-            <div class="stat">
-                <div class="stat-number">92M tons</div>
-                <div class="stat-label">Waste per Year</div>
+            <div class="stat-box">
+                <div class="stat-num">92M</div>
+                <div class="stat-txt">Tons Waste / Year</div>
             </div>
-            <div class="stat">
-                <div class="stat-number">10%</div>
-                <div class="stat-label">Global CO2 Emissions</div>
+            <div class="stat-box">
+                <div class="stat-num">10%</div>
+                <div class="stat-txt">Global CO2</div>
             </div>
-            <div class="stat">
-                <div class="stat-number">$2/day</div>
-                <div class="stat-label">Average Worker Pay</div>
-            </div>
-        </div>
-
-        <!-- WHY -->
-        <div class="section why-section">
-            <div class="section-title">Why Do People Buy Fast Fashion?</div>
-            <div class="reasons-grid">
-                <div class="reason-card">
-                    <div class="card-icon" style="color:#2980b9;">$</div>
-                    <div class="reason-title">Cheap Prices</div>
-                    <div class="reason-text">Fast fashion is affordable and accessible to everyone, making it tempting to buy more.</div>
-                </div>
-                <div class="reason-card">
-                    <div class="card-icon" style="color:#e74c3c;">*</div>
-                    <div class="reason-title">Trendy Styles</div>
-                    <div class="reason-text">New clothes arrive very often, so it is easy to follow the latest fashion trends.</div>
-                </div>
-                <div class="reason-card">
-                    <div class="card-icon" style="color:#8e44ad;">@</div>
-                    <div class="reason-title">Social Media</div>
-                    <div class="reason-text">Seeing influencers on social media, people want to buy new outfits all the time.</div>
-                </div>
+            <div class="stat-box">
+                <div class="stat-num">$2</div>
+                <div class="stat-txt">Worker Pay / Day</div>
             </div>
         </div>
 
-        <!-- ENVIRONMENT -->
-        <div class="section env-section">
-            <div class="section-title">Polluting Our Planet</div>
-            <div class="impact-cards">
-                <div class="impact-card">
-                    <div class="impact-stat">7,000 Litres</div>
-                    <div class="impact-desc">One pair of jeans needs about <strong>7,000 litres of water</strong> to produce -- that is what one person drinks in 5 years!</div>
-                </div>
-                <div class="impact-card">
-                    <div class="impact-stat">Massive Waste</div>
-                    <div class="impact-desc">Many clothes are <strong>thrown away quickly</strong>. Fast fashion uses a lot of water and creates enormous amounts of waste.</div>
-                </div>
+        <!-- WHY PEOPLE BUY -->
+        <div class="three-col">
+            <div class="col-card">
+                <div class="icon-circle blue">$</div>
+                <h3>Cheap Prices</h3>
+                <p>Affordable for everyone. So people keep buying more and more.</p>
+            </div>
+            <div class="col-card">
+                <div class="icon-circle red">!</div>
+                <h3>New Trends</h3>
+                <p>New styles every week. Easy to follow fashion all the time.</p>
+            </div>
+            <div class="col-card">
+                <div class="icon-circle orange">@</div>
+                <h3>Social Media</h3>
+                <p>Influencers make people want to buy new outfits constantly.</p>
             </div>
         </div>
 
-        <!-- WORKERS -->
-        <div class="section workers-section">
-            <div class="section-title">The Human Cost</div>
-            <div class="workers-text">
-                <p>
-                    Fast fashion is also affecting workers. Many people are working in
-                    <strong>difficult conditions</strong> and earning <strong>very little money</strong>.
-                    Some workers have worked long hours in <strong>unsafe factories</strong>.
-                </p>
+        <!-- IMPACT -->
+        <div class="section-label">The Dark Side</div>
+        <div class="section-title">The Real Cost of Cheap Clothes</div>
+
+        <div class="impact-row">
+            <div class="impact-box water">
+                <div class="big-num">7,000 L</div>
+                <div class="desc">of water to make <strong>one pair of jeans</strong>.<br>Clothes are thrown away after weeks.</div>
             </div>
-            <div class="workers-facts">
-                <div class="worker-fact">
-                    <strong>HOURS</strong>
-                    Long hours with no breaks
-                </div>
-                <div class="worker-fact">
-                    <strong>WAGES</strong>
-                    Extremely low wages
-                </div>
-                <div class="worker-fact">
-                    <strong>DANGER</strong>
-                    Unsafe working conditions
-                </div>
+            <div class="impact-box workers">
+                <div class="big-num">$2 / day</div>
+                <div class="desc">Workers earn almost nothing.<br><strong>Long hours. Unsafe factories.</strong></div>
             </div>
         </div>
 
         <!-- SOLUTIONS -->
-        <div class="section solutions-section">
-            <div class="section-title">Make Better Choices!</div>
+        <div class="solutions">
+            <div class="solutions-title">WHAT YOU CAN DO</div>
             <div class="solutions-grid">
-                <div class="solution-card">
-                    <div class="card-icon" style="color:#27ae60; font-size:16pt;">1</div>
-                    <div class="solution-title">Buy Less</div>
-                    <div class="solution-text">Only purchase what you truly need and will wear often.</div>
+                <div class="sol-item">
+                    <div class="sol-num">1</div>
+                    <h4>Buy Less</h4>
+                    <p>Only what you truly need</p>
                 </div>
-                <div class="solution-card">
-                    <div class="card-icon" style="color:#27ae60; font-size:16pt;">2</div>
-                    <div class="solution-title">Second-Hand</div>
-                    <div class="solution-text">Shop at thrift stores. Give clothes a second life!</div>
+                <div class="sol-item">
+                    <div class="sol-num">2</div>
+                    <h4>Second-Hand</h4>
+                    <p>Thrift stores, Vinted...</p>
                 </div>
-                <div class="solution-card">
-                    <div class="card-icon" style="color:#27ae60; font-size:16pt;">3</div>
-                    <div class="solution-title">Repair</div>
-                    <div class="solution-text">Fix your clothes instead of throwing them away.</div>
+                <div class="sol-item">
+                    <div class="sol-num">3</div>
+                    <h4>Repair</h4>
+                    <p>Fix instead of throwing away</p>
                 </div>
-                <div class="solution-card">
-                    <div class="card-icon" style="color:#27ae60; font-size:16pt;">4</div>
-                    <div class="solution-title">Donate</div>
-                    <div class="solution-text">Give your old clothes to someone who needs them.</div>
+                <div class="sol-item">
+                    <div class="sol-num">4</div>
+                    <h4>Donate</h4>
+                    <p>Give clothes a second life</p>
                 </div>
             </div>
         </div>
 
         <!-- FOOTER -->
-        <div class="footer-cta">
-            <div class="cta-text">Your Choices Matter.</div>
-            <div class="cta-sub">
-                Every time you buy a piece of clothing, you are making a choice.
-                Choose wisely. Choose sustainably. Choose to make a difference.
+        <div class="footer">
+            <div class="cta">Your Choices Matter.</div>
+            <div class="sub">Every purchase is a vote. Choose wisely.</div>
+            <div class="tags">
+                <span class="tag">#ThinkBeforeYouBuy</span>
+                <span class="tag">#SustainableFashion</span>
+                <span class="tag">#SayNoToFastFashion</span>
             </div>
-            <div class="cta-hashtags">
-                #ThinkBeforeYouBuy &nbsp; #SustainableFashion &nbsp; #SayNoToFastFashion &nbsp; #WearItLonger
-            </div>
-            <div class="author">By Bilal Yousfi -- English Class</div>
+            <div class="credits">By Bilal Yousfi -- English Class</div>
         </div>
     </div>
 </body>
